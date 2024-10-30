@@ -1,13 +1,14 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import Layout from "./components/layout";
+import LoadingScreen from "./components/loading-screen";
 import Profile from "./routes/profile";
 
 const router = createBrowserRouter ([
   {
     path:"/" ,
-    element: <Layout /> ,
-    children : [
+    element: <Layout />,
+    children: [
       {
         path: "",
         element: <Home />,
@@ -21,8 +22,20 @@ const router = createBrowserRouter ([
 ]);
 
 function App() {
-  return (<>
-  <RouterProvider router ={router} />
+  const [isLoading, setIsLoading] =useState(true);
+  const init = async()=> {
+    //wait for firebase 
+    setIsLoading(flase);
+    
+  };
+  useEffect (()=> {
+    init();
+  }, []);
+  return (
+  <>
+  <GlobalStyles />
+  {isLoading ? <LoadingScreen /> :
+  <RouterProvider router ={router} /> }
   </>
   );
 }
