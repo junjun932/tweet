@@ -1,8 +1,19 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  useEffect,
+  useState
+} from "react";
 
+import CreateAccount from "./routes/create-account";
+import Home
+ from "./routes/home";
 import Layout from "./components/layout";
 import LoadingScreen from "./components/loading-screen";
+import Login from "./routes/login";
 import Profile from "./routes/profile";
+import { auth } from "./firebase";
+import { createGlobalStyle } from "styled-components";
+import reset from "styled-reset";
 
 const router = createBrowserRouter ([
   {
