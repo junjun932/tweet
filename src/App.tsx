@@ -24,8 +24,8 @@ const router = createBrowserRouter ([
 function App() {
   const [isLoading, setIsLoading] =useState(true);
   const init = async()=> {
-    //wait for firebase 
-    setIsLoading(flase);
+    await auth.authStateReady();
+    setIsLoading(false);
     
   };
   useEffect (()=> {
