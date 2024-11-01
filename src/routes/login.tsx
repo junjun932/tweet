@@ -12,6 +12,7 @@ import { FirebaseError } from "firebase/app";
 import { auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
+
 export default function CreateAccount() {
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
@@ -46,7 +47,7 @@ export default function CreateAccount() {
   };
   return (
     <Wrapper>
-      <Title>Log into 𝕏</Title>
+      <Title>Log into 🐳</Title>
       <Form onSubmit={onSubmit}>
         <Input
           onChange={onChange}
