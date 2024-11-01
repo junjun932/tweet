@@ -11,7 +11,8 @@ import Layout from "./components/layout";
 import LoadingScreen from "./components/loading-screen";
 import Login from "./routes/login";
 import Profile from "./routes/profile";
-import { auth } from "./firebase";
+import ProtectedRoute from "./components/protected-route";
+import {auth} from "./firebase";
 import reset from "styled-reset";
 
 const Wrapper = styled.div`
@@ -23,7 +24,11 @@ const Wrapper = styled.div`
 const router = createBrowserRouter ([
   {
     path: "/",
-    element: <Layout />,
+    element: (
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "/home",
@@ -68,13 +73,12 @@ function App() {
   }, []);
   return (
   
-  <>
+  
   <Wrapper>
   <GlobalStyles />
   {isLoading ? <LoadingScreen /> :
   <RouterProvider router ={router} /> }
   </Wrapper>
-  </>
   );
 }
 
