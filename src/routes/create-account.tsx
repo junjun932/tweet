@@ -10,7 +10,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 import { FirebaseError } from "firebase/app";
-import {auth} from "../firebase"
+import GithubButton from "../components/github-btn";
+import { auth } from "../firebase";
 import { useState } from "react";
 
 export default function CreateAccount() {
@@ -20,7 +21,6 @@ export default function CreateAccount() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { name, value },
@@ -36,34 +36,29 @@ export default function CreateAccount() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-    if(isLoading || name === "" ||email ==="" ||password === "") return;
-
+    if (isLoading || name === "" || email === "" || password === "") return;
     try {
-     setLoading(true);
-     const credentials = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-     );
-     
-     await updateProfile(credentials.user , {
-      displayName: name,
-     });
-     navigate("/");
-     
+      setLoading(true);
+      const credentials = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await updateProfile(credentials.user, {
+        displayName: name,
+      });
+      navigate("/");
     } catch (e) {
-      if( e instanceof FirebaseError) {
+      if (e instanceof FirebaseError) {
         setError(e.message);
       }
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <Wrapper>
-      <Title>Log into 🐳</Title>
-      <Title>Join TWEET</Title>
+      <Title>Join 𝕏</Title>
       <Form onSubmit={onSubmit}>
         <Input
           onChange={onChange}
@@ -83,7 +78,7 @@ export default function CreateAccount() {
         />
         <Input
           onChange={onChange}
-          value ={password}
+          value={password}
           name="password"
           placeholder="Password"
           type="password"
@@ -96,8 +91,9 @@ export default function CreateAccount() {
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}
       <Switcher>
-      Already have an account ? <Link to ="/login">Log in &rarr; </Link>
+        Already have an account? <Link to="/login">Log in &rarr;</Link>
       </Switcher>
+      <GithubButton />
     </Wrapper>
   );
 }
