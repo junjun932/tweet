@@ -1,5 +1,6 @@
 import { styled } from "styled-components";
 import { useState } from "react";
+
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -50,41 +51,44 @@ const SubmitBtn = styled.input`
     opacity: 0.9;
   }
 `;
+
+
+
 export default function PostTweetForm() {
-  const [isLoading, setLoading] = useState(false);
-  const [tweet, setTweet] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTweet(e.target.value);
-  };
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    if (files && files.length === 1) {
-      setFile(files[0]);
-    }
-  };
-  return (
-    <Form>
-      <TextArea
-        rows={5}
-        maxLength={180}
-        onChange={onChange}
-        value={tweet}
-        placeholder="What is happening?!"
-      />
-      <AttachFileButton htmlFor="file">
-        {file ? "Photo added 🆗" : "Add photo"}
-      </AttachFileButton>
-      <AttachFileInput
-        onChange={onFileChange}
-        type="file"
-        id="file"
-        accept="image/*"
-      />
-      <SubmitBtn
-        type="submit"
-        value={isLoading ? "Posting..." : "Post Tweet"}
-      />
-    </Form>
-  );
-}
+    const [isLoading, setLoading] = useState(false);
+    const [tweet, setTweet] = useState("");
+    const [file, setFile] = useState<File | null>(null);
+    const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setTweet(e.target.value);
+    };
+    const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { files } = e.target;
+      if (files && files.length === 1) {
+        setFile(files[0]);
+      }
+    };
+    return (
+      <Form>
+        <TextArea
+          rows={5}
+          maxLength={180}
+          onChange={onChange}
+          value={tweet}
+          placeholder="What is happening?!"
+        />
+        <AttachFileButton htmlFor="file">
+          {file ? "Photo added ✅" : "Add photo"}
+        </AttachFileButton>
+        <AttachFileInput
+          onChange={onFileChange}
+          type="file"
+          id="file"
+          accept="image/*"
+        />
+        <SubmitBtn
+          type="submit"
+          value={isLoading ? "Posting..." : "Post Tweet"}
+        />
+      </Form>
+    );
+  }

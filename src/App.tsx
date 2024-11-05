@@ -10,6 +10,7 @@ import Home from "./routes/home";
 import Layout from "./components/layout";
 import LoadingScreen from "./components/loading-screen";
 import Login from "./routes/login";
+import PostTweetForm from "./components/post-tweet-form";
 import Profile from "./routes/profile";
 import ProtectedRoute from "./components/protected-route";
 import {auth} from "./firebase";
