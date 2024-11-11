@@ -20,20 +20,14 @@ export interface ITweet {
   username: string;
   createdAt: number;
 }
-export interface ITweet {
-  id: string;
-  photo?: string;
-  tweet: string;
-  userId: string;
-  username: string;
-  createdAt: number;
-}
+
 
 
 const Wrapper = styled.div`
   display: flex;
   gap: 10px;
   flex-direction: column;
+  overflow-y: scroll;
 `;
 
 export default function Timeline() {

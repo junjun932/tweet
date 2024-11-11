@@ -35,7 +35,7 @@ const Payload = styled.p`
 `;
 
 const DeleteButton = styled.button`
-  background-color: tomato;
+  background-color: red;
   color: white;
   font-weight: 600;
   border: 0;
