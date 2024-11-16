@@ -1,5 +1,5 @@
 import { addDoc, collection, updateDoc } from "firebase/firestore";
-import {auth, db, storage} from "../firebase"
+import { auth, db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import { styled } from "styled-components";
@@ -79,7 +79,6 @@ export default function PostTweetForm() {
     if (!user || isLoading || tweet === "" || tweet.length > 180) return;
     try {
       setLoading(true);
-
       const doc = await addDoc(collection(db, "tweets"), {
         tweet,
         createdAt: Date.now(),
@@ -87,7 +86,7 @@ export default function PostTweetForm() {
         userId: user.uid,
       });
       if (file) {
-        const locationRef = ref(storage , `tweets/${user.uid}/${doc.id}`);
+        const locationRef = ref(storage, `tweets/${user.uid}/${doc.id}`);
         const result = await uploadBytes(locationRef, file);
         const url = await getDownloadURL(result.ref);
         await updateDoc(doc, {
@@ -99,7 +98,7 @@ export default function PostTweetForm() {
     } catch (e) {
       console.log(e);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
   return (

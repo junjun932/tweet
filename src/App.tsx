@@ -1,28 +1,18 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import styled, { createGlobalStyle } from "styled-components";
-import {
-  useEffect,
-  useState
-} from "react";
+import { createGlobalStyle, styled } from "styled-components";
+import { useEffect, useState } from "react";
 
 import CreateAccount from "./routes/create-account";
 import Home from "./routes/home";
 import Layout from "./components/layout";
 import LoadingScreen from "./components/loading-screen";
 import Login from "./routes/login";
-import PostTweetForm from "./components/post-tweet-form";
 import Profile from "./routes/profile";
 import ProtectedRoute from "./components/protected-route";
-import {auth} from "./firebase";
+import { auth } from "./firebase";
 import reset from "styled-reset";
 
-const Wrapper = styled.div`
-  height:100vh;
-  display: flex;
-  justify-content: center;
-`;
-
-const router = createBrowserRouter ([
+const router = createBrowserRouter([
   {
     path: "/",
     element: (
@@ -32,11 +22,11 @@ const router = createBrowserRouter ([
     ),
     children: [
       {
-        path: "/home",
+        path: "",
         element: <Home />,
       },
       {
-        path: "/profile",
+        path: "profile",
         element: <Profile />,
       },
     ],
@@ -50,6 +40,7 @@ const router = createBrowserRouter ([
     element: <CreateAccount />,
   },
 ]);
+
 const GlobalStyles = createGlobalStyle`
   ${reset};
   * {
@@ -62,24 +53,26 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
+const Wrapper = styled.div`
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+`;
 
 function App() {
-  const [isLoading, setIsLoading] =useState(true);
-  const init = async ()=> {
+  const [isLoading, setLoading] = useState(true);
+  const init = async () => {
     await auth.authStateReady();
-    setIsLoading(false);
-    };
-  useEffect (()=> {
+    setLoading(false);
+  };
+  useEffect(() => {
     init();
   }, []);
   return (
-  
-  
-  <Wrapper>
-  <GlobalStyles />
-  {isLoading ? <LoadingScreen /> :
-  <RouterProvider router ={router} /> }
-  </Wrapper>
+    <Wrapper>
+      <GlobalStyles />
+      {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
+    </Wrapper>
   );
 }
 
