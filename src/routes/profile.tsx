@@ -72,7 +72,7 @@ const Tweets = styled.div`
 export default function Profile() {
   const [user, setUser] = useState(auth.currentUser);
   const [avatar, setAvatar] = useState(user?.photoURL); 
-  const [name, setName] = useState(user?.displayName ?? "Anonymous"); 
+  const [name, setName] = useState<string | null>(null); 
   const [tweets, setTweets] = useState<ITweet[]>([]);
 
   useEffect(() => {
