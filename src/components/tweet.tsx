@@ -94,7 +94,7 @@ const CreatedAt = styled.div`
 
 export default function Tweet({ username, photo, tweet, userId, id, createdAt }: ITweet) {
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
-  const [selectedPhoto, setSelectedPhoto] = useState(null); // 선택한 사진 상태
+  const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null); // 선택한 사진 상태
   
 
 const date = new Date(createdAt).toLocaleString(); // 타임스탬프를 Date 객체로 변환
