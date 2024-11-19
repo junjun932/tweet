@@ -14,14 +14,16 @@ const Wrapper = styled.div`
 `;
 const Column = styled.div`
   &:last-child {
-    place-self: end;
+    justify-self: end;
   }
 `;
 
 const Photo = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 15px;
+  object-fit: cover; 
+  margin: 15px;
 `;
 
 const Username = styled.span`
@@ -45,7 +47,20 @@ const DeleteButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
 `;
-export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
+const CreatedAt = styled.div`
+  justify-self: end; 
+  font-size: 14px; 
+  color: #00BFFF; 
+  margin-right: 380px; 
+`;
+
+export default function Tweet({ username, photo, tweet, userId, id, createdAt }: ITweet) {
+  console.log(createdAt);
+
+const date = new Date(createdAt).toLocaleString(); // 타임스탬프를 Date 객체로 변환
+
+
+
   const user = auth.currentUser;
   const onDelete = async () => {
     const ok = confirm("Are you sure you want to delete this tweet?");
@@ -72,6 +87,7 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
         ) : null}
       </Column>
       <Column>{photo ? <Photo src={photo} /> : null}</Column>
+      <CreatedAt>{date}</CreatedAt>
     </Wrapper>
   );
 }
