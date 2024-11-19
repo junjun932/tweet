@@ -69,8 +69,8 @@ const ModalContent = styled.div`
 `;
 
 const ModalPhoto = styled.img`
-  max-width: 90%; /* 화면에 맞게 크기 제한 */
-  max-height: 80vh; /* 세로 크기 제한 */
+  max-width: 90%; 
+  max-height: 80vh; 
   border-radius: 15px;
 `;
 
@@ -93,11 +93,11 @@ const CreatedAt = styled.div`
 `;
 
 export default function Tweet({ username, photo, tweet, userId, id, createdAt }: ITweet) {
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
-  const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null); // 선택한 사진 상태
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null); 
   
 
-const date = new Date(createdAt).toLocaleString(); // 타임스탬프를 Date 객체로 변환
+const date = new Date(createdAt).toLocaleString(); 
 
 
 
@@ -118,7 +118,7 @@ const date = new Date(createdAt).toLocaleString(); // 타임스탬프를 Date �
   };
 
   const onPhotoClick = () => {
-    if (!photo) return; // 사진이 없으면 클릭 이벤트 중지
+    if (!photo) return; 
     setSelectedPhoto(photo);
     setIsModalOpen(true);
   };
@@ -144,7 +144,7 @@ const date = new Date(createdAt).toLocaleString(); // 타임스탬프를 Date �
         <CreatedAt>{date}</CreatedAt>
       </Wrapper>
 
-      {isModalOpen && selectedPhoto && ( // 조건부 렌더링으로 안전성 강화
+      {isModalOpen && selectedPhoto && ( 
         <ModalOverlay>
           <ModalContent>
             <CloseButton onClick={closeModal}>Close</CloseButton>
