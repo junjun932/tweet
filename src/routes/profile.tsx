@@ -8,12 +8,12 @@ import {
   where,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { onAuthStateChanged, updateProfile } from "firebase/auth";
 import { useEffect, useState } from "react";
 
 import { ITweet } from "../components/timeline";
 import Tweet from "../components/tweet";
 import { styled } from "styled-components";
-import { updateProfile } from "firebase/auth";
 
 const Wrapper = styled.div`
   display: flex;
@@ -21,6 +21,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   gap: 20px;
 `;
+
 const AvatarUpload = styled.label`
   width: 80px;
   overflow: hidden;
@@ -35,22 +36,21 @@ const AvatarUpload = styled.label`
     width: 50px;
   }
 `;
+
 const AvatarImg = styled.img`
   width: 100%;
 `;
+
 const AvatarInput = styled.input`
   display: none;
 `;
-const Name = styled.span`
-  font-size: 22px;
-`;
+
 const NameInput = styled.input`
   font-size: 22px;
   border: 1px solid #ccc;
   padding: 5px;
   border-radius: 10px;
 `;
-
 
 const UpdateButton = styled.button`
   font-size: 16px;
@@ -62,7 +62,6 @@ const UpdateButton = styled.button`
   cursor: pointer;
 `;
 
-
 const Tweets = styled.div`
   display: flex;
   width: 100%;
@@ -71,12 +70,22 @@ const Tweets = styled.div`
 `;
 
 export default function Profile() {
-    
-  const user = auth.currentUser;
+  const [user, setUser] = useState(auth.currentUser);
   const [avatar, setAvatar] = useState(user?.photoURL); 
   const [name, setName] = useState(user?.displayName ?? "Anonymous"); 
   const [tweets, setTweets] = useState<ITweet[]>([]);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser); // 사용자 정보 업데이트
+        setName(currentUser.displayName ?? "Anonymous"); // 초기 이름 설정
+        setAvatar(currentUser.photoURL); // 초기 아바타 설정
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
@@ -93,13 +102,15 @@ export default function Profile() {
     }
   };
 
-  
   const onNameChange = async () => {
     if (user && name.trim()) {
       await updateProfile(user, {
         displayName: name, 
       });
       alert("Name has been successfully updated!");
+
+      // 업데이트된 이름을 상태에 반영
+      setName(user.displayName);
     } else {
       alert("Please enter a name.");
     }
@@ -159,7 +170,7 @@ export default function Profile() {
         onChange={(e) => setName(e.target.value)} 
       />
       
-      <UpdateButton onClick={onNameChange}>Edit  Name</UpdateButton>
+      <UpdateButton onClick={onNameChange}>Edit Name</UpdateButton>
       <Tweets>
         {tweets.map((tweet) => (
           <Tweet key={tweet.id} {...tweet} /> 
