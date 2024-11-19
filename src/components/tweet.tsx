@@ -1,7 +1,7 @@
 import { auth, db, storage } from "../firebase";
 import { deleteDoc, doc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
-import  {useState} from "react";
+
 import { ITweet } from "./timeline";
 import { styled } from "styled-components";
 import  {useState} from "react";

@@ -109,7 +109,7 @@ export default function Profile() {
       });
       alert("Name has been successfully updated!");
 
-      // 업데이트된 이름을 상태에 반영
+      
       setName(user.displayName);
     } else {
       alert("Please enter a name.");
