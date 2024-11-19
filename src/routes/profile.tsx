@@ -71,16 +71,16 @@ const Tweets = styled.div`
 
 export default function Profile() {
   const [user, setUser] = useState(auth.currentUser);
-  const [avatar, setAvatar] = useState(user?.photoURL); 
-  const [name, setName] = useState<string | null>(null); 
+  const [avatar, setAvatar] = useState(user?.photoURL);
+  const [name, setName] = useState<string>(""); 
   const [tweets, setTweets] = useState<ITweet[]>([]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        setUser(currentUser); // 사용자 정보 업데이트
-        setName(currentUser.displayName ?? "Anonymous"); // 초기 이름 설정
-        setAvatar(currentUser.photoURL); // 초기 아바타 설정
+        setUser(currentUser);
+        setName(currentUser.displayName ?? "Anonymous");
+        setAvatar(currentUser.photoURL);
       }
     });
 
@@ -95,9 +95,9 @@ export default function Profile() {
       const locationRef = ref(storage, `avatars/${user?.uid}`);
       const result = await uploadBytes(locationRef, file);
       const avatarUrl = await getDownloadURL(result.ref);
-      setAvatar(avatarUrl); 
+      setAvatar(avatarUrl);
       await updateProfile(user, {
-        photoURL: avatarUrl, 
+        photoURL: avatarUrl,
       });
     }
   };
@@ -105,24 +105,24 @@ export default function Profile() {
   const onNameChange = async () => {
     if (user && name.trim()) {
       await updateProfile(user, {
-        displayName: name, 
+        displayName: name.trim(), 
       });
       alert("Name has been successfully updated!");
-
-      
-      setName(user.displayName);
     } else {
-      alert("Please enter a name.");
+      alert("Please enter a valid name.");
     }
   };
 
   const fetchTweets = async () => {
+    if (!user) return;
+
     const tweetQuery = query(
       collection(db, "tweets"),
-      where("userId", "==", user?.uid),
+      where("userId", "==", user.uid),
       orderBy("createdAt", "desc"),
       limit(25)
     );
+
     const snapshot = await getDocs(tweetQuery);
     const tweets = snapshot.docs.map((doc) => {
       const { tweet, createdAt, userId, username, photo } = doc.data();
@@ -140,13 +140,13 @@ export default function Profile() {
 
   useEffect(() => {
     fetchTweets();
-  }, []);
+  }, [user]);
 
   return (
     <Wrapper>
       <AvatarUpload htmlFor="avatar">
         {avatar ? (
-          <AvatarImg src={avatar} /> 
+          <AvatarImg src={avatar} />
         ) : (
           <svg
             fill="currentColor"
@@ -159,21 +159,19 @@ export default function Profile() {
         )}
       </AvatarUpload>
       <AvatarInput
-        onChange={onAvatarChange} 
+        onChange={onAvatarChange}
         id="avatar"
         type="file"
         accept="image/*"
       />
-      
       <NameInput
-        value={name} 
-        onChange={(e) => setName(e.target.value)} 
+        value={name}
+        onChange={(e) => setName(e.target.value)}
       />
-      
       <UpdateButton onClick={onNameChange}>Edit Name</UpdateButton>
       <Tweets>
         {tweets.map((tweet) => (
-          <Tweet key={tweet.id} {...tweet} /> 
+          <Tweet key={tweet.id} {...tweet} />
         ))}
       </Tweets>
     </Wrapper>
