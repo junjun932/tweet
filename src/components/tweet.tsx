@@ -1,7 +1,7 @@
 import { auth, db, storage } from "../firebase";
 import { deleteDoc, doc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
-
+import  {useState} from "react";
 import { ITweet } from "./timeline";
 import { styled } from "styled-components";
 
@@ -47,6 +47,43 @@ const DeleteButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
 `;
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalContent = styled.div`
+  position: relative;
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+`;
+
+const ModalPhoto = styled.img`
+  max-width: 90%; /* 화면에 맞게 크기 제한 */
+  max-height: 80vh; /* 세로 크기 제한 */
+  border-radius: 15px;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+`;
 const CreatedAt = styled.div`
   justify-self: end; 
   font-size: 14px; 
@@ -55,13 +92,16 @@ const CreatedAt = styled.div`
 `;
 
 export default function Tweet({ username, photo, tweet, userId, id, createdAt }: ITweet) {
-  console.log(createdAt);
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
+  const [selectedPhoto, setSelectedPhoto] = useState(null); // 선택한 사진 상태
+  
 
 const date = new Date(createdAt).toLocaleString(); // 타임스탬프를 Date 객체로 변환
 
 
 
   const user = auth.currentUser;
+  
   const onDelete = async () => {
     const ok = confirm("Are you sure you want to delete this tweet?");
     if (!ok || user?.uid !== userId) return;
@@ -72,22 +112,45 @@ const date = new Date(createdAt).toLocaleString(); // 타임스탬프를 Date �
         await deleteObject(photoRef);
       }
     } catch (e) {
-      console.log(e);
-    } finally {
-      //
+      console.error("Error deleting tweet:", e);
     }
   };
+
+  const onPhotoClick = () => {
+    if (!photo) return; // 사진이 없으면 클릭 이벤트 중지
+    setSelectedPhoto(photo);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedPhoto(null);
+  };
+
   return (
-    <Wrapper>
-      <Column>
-        <Username>{username}</Username>
-        <Payload>{tweet}</Payload>
-        {user?.uid === userId ? (
-          <DeleteButton onClick={onDelete}>Delete</DeleteButton>
-        ) : null}
-      </Column>
-      <Column>{photo ? <Photo src={photo} /> : null}</Column>
-      <CreatedAt>{date}</CreatedAt>
-    </Wrapper>
+    <>
+      <Wrapper>
+        <Column>
+          <Username>{username}</Username>
+          <Payload>{tweet}</Payload>
+          {user?.uid === userId ? (
+            <DeleteButton onClick={onDelete}>Delete</DeleteButton>
+          ) : null}
+        </Column>
+        <Column>
+          {photo && <Photo src={photo} onClick={onPhotoClick} />}
+        </Column>
+        <CreatedAt>{date}</CreatedAt>
+      </Wrapper>
+
+      {isModalOpen && selectedPhoto && ( // 조건부 렌더링으로 안전성 강화
+        <ModalOverlay>
+          <ModalContent>
+            <CloseButton onClick={closeModal}>Close</CloseButton>
+            <ModalPhoto src={selectedPhoto} />
+          </ModalContent>
+        </ModalOverlay>
+      )}
+    </>
   );
 }
