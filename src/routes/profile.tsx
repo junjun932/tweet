@@ -166,6 +166,7 @@ export default function Profile() {
       />
       <NameInput
         value={name}
+        placeholder="Enter User Name"
         onChange={(e) => setName(e.target.value)}
       />
       <UpdateButton onClick={onNameChange}>Edit Name</UpdateButton>
