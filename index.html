@@ -39,6 +39,14 @@
       justify-content: center;
       gap: 10px;
       padding: 20px;
+      overflow: hidden;
+    }
+
+    .item img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
     }
 
     .item {
@@ -52,6 +60,11 @@
 
 
     @media (max-width: 390px) {
+      .photo-preview img {
+        max-width: 90%;
+
+      }
+
       .header {
         font-size: 18px;
         padding: 10px;
@@ -61,6 +74,10 @@
         width: 90px;
         padding: 10px;
       }
+    }
+
+    .item img {
+      max-width: 100%;
     }
   </style>
 </head>
